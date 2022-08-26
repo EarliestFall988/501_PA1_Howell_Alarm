@@ -1,0 +1,43 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_501_PA1_Howell_Alarm"
+        xmlns:Core="clr-namespace:Core;assembly=Core" x:Class="_501_PA1_Howell_Alarm.MainWindow"
+        mc:Ignorable="d"
+        Title="Alarm501" Height="475" Width="300"
+        >
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF2F2F2F"/>
+            <GradientStop Color="#FF222222" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontSize="22" Foreground="#FF7F7F7F" Content="Alarm Going Off:" />
+
+        <StackPanel  Grid.Row=" 1" Margin="20,20,20,20" CanVerticallyScroll="True">
+            <Label FontSize="18" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" Width="68" Height="30" VerticalAlignment="Top" Margin="0,20,0,9" Content="Alarms"/>
+            <ListView Background="#222" x:Name="alarmSummary" ItemsSource="{Binding Alarms}" IsSynchronizedWithCurrentItem="True" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" >
+                            <TextBlock Text="{Binding Path=AlarmID}" Foreground="#FFE4E4E4"/>
+                            <Button Content="Edit" Click="EditButtonClick"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+        <local:AlarmActions x:Name="AlarmActions" Grid.Row="2" />
+    </Grid>
+</Window>
