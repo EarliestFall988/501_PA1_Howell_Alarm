@@ -17,14 +17,14 @@ namespace AlarmCoreTests
         [Fact]
         public void AddingAndRemovingAlarmNonPersistantSuccessful()
         {
-            AlarmFactory.Clear(false); // handling persistant issues
+            AlarmsManager.Clear(false); // handling persistant issues
 
-            var alarm = new Alarm(DateTime.Now, AlarmState.Off);
+            var alarm = new Alarm(DateTime.Now, AlarmState.Disabled);
 
-            AlarmFactory.Create(alarm, false);
-            Assert.Equal(1, AlarmFactory.AlarmCount);
-            AlarmFactory.Clear(false);
-            Assert.Equal(0, AlarmFactory.AlarmCount);
+            AlarmsManager.Create(alarm, false);
+            Assert.Equal(1, AlarmsManager.AlarmCount);
+            AlarmsManager.Clear(false);
+            Assert.Equal(0, AlarmsManager.AlarmCount);
         }
 
 
@@ -34,17 +34,17 @@ namespace AlarmCoreTests
         [Fact]
         public void AddingAndRemovingTwoAlarmsNonPersistantSuccessful()
         {
-            AlarmFactory.Clear(false); // handling persistant issues
+            AlarmsManager.Clear(false); // handling persistant issues
 
-            var alarm = new Alarm(DateTime.Now, AlarmState.Off);
-            var alarm2 = new Alarm(DateTime.Now.AddHours(2), AlarmState.On);
+            var alarm = new Alarm(DateTime.Now, AlarmState.Disabled);
+            var alarm2 = new Alarm(DateTime.Now.AddHours(2), AlarmState.Enabled);
 
-            AlarmFactory.Create(alarm, false);
-            AlarmFactory.Create(alarm2, false);
+            AlarmsManager.Create(alarm, false);
+            AlarmsManager.Create(alarm2, false);
 
-            Assert.Equal(2, AlarmFactory.AlarmCount);
-            AlarmFactory.Clear(false);
-            Assert.Equal(0, AlarmFactory.AlarmCount);
+            Assert.Equal(2, AlarmsManager.AlarmCount);
+            AlarmsManager.Clear(false);
+            Assert.Equal(0, AlarmsManager.AlarmCount);
         }
 
         /// <summary>
@@ -53,23 +53,23 @@ namespace AlarmCoreTests
         [Fact]
         public void AddingAndRemovingFiveAlarmsNonPersistantSuccessful()
         {
-            AlarmFactory.Clear(false); // handling persistant issues
+            AlarmsManager.Clear(false); // handling persistant issues
 
-            var alarm = new Alarm(DateTime.Now, AlarmState.Off);
-            var alarm2 = new Alarm(DateTime.Now.AddHours(2), AlarmState.On);
-            var alarm3 = new Alarm(DateTime.Now.AddHours(2), AlarmState.On);
-            var alarm4 = new Alarm(DateTime.Now.AddHours(2), AlarmState.On);
-            var alarm5 = new Alarm(DateTime.Now.AddHours(2), AlarmState.On);
+            var alarm = new Alarm(DateTime.Now, AlarmState.Disabled);
+            var alarm2 = new Alarm(DateTime.Now.AddHours(2), AlarmState.Enabled);
+            var alarm3 = new Alarm(DateTime.Now.AddHours(2), AlarmState.Enabled);
+            var alarm4 = new Alarm(DateTime.Now.AddHours(2), AlarmState.Enabled);
+            var alarm5 = new Alarm(DateTime.Now.AddHours(2), AlarmState.Enabled);
 
-            AlarmFactory.Create(alarm, false);
-            AlarmFactory.Create(alarm2, false);
-            AlarmFactory.Create(alarm3, false);
-            AlarmFactory.Create(alarm4, false);
-            AlarmFactory.Create(alarm5, false);
+            AlarmsManager.Create(alarm, false);
+            AlarmsManager.Create(alarm2, false);
+            AlarmsManager.Create(alarm3, false);
+            AlarmsManager.Create(alarm4, false);
+            AlarmsManager.Create(alarm5, false);
 
-            Assert.Equal(5, AlarmFactory.AlarmCount);
-            AlarmFactory.Clear(false);
-            Assert.Equal(0, AlarmFactory.AlarmCount);
+            Assert.Equal(5, AlarmsManager.AlarmCount);
+            AlarmsManager.Clear(false);
+            Assert.Equal(0, AlarmsManager.AlarmCount);
         }
 
         /// <summary>
@@ -78,19 +78,19 @@ namespace AlarmCoreTests
         [Fact]
         public void AddOneAlarmPersistantSuccessful()
         {
-            AlarmFactory.Clear(false); // handling persistant issues
+            AlarmsManager.Clear(false); // handling persistant issues
 
-            var alarm = new Alarm(DateTime.Now.AddHours(1), AlarmState.On);
-            AlarmFactory.Create(alarm);
-            Assert.Equal(1, AlarmFactory.AlarmCount);
+            var alarm = new Alarm(DateTime.Now.AddHours(1), AlarmState.Enabled);
+            AlarmsManager.Create(alarm);
+            Assert.Equal(1, AlarmsManager.AlarmCount);
 
-            AlarmFactory.Clear(false);
-            Assert.Equal(0, AlarmFactory.AlarmCount);
+            AlarmsManager.Clear(false);
+            Assert.Equal(0, AlarmsManager.AlarmCount);
 
-            AlarmFactory.Initialize();
-            Assert.Equal(1, AlarmFactory.AlarmCount);
+            AlarmsManager.Initialize();
+            Assert.Equal(1, AlarmsManager.AlarmCount);
 
-            AlarmFactory.RemoveFile();
+            AlarmsManager.RemoveFile();
         }
 
         /// <summary>
@@ -99,23 +99,23 @@ namespace AlarmCoreTests
         [Fact]
         public void AddTenAlarmsPersistantSuccessful()
         {
-            AlarmFactory.Clear(false); // handling persistant/static issues
+            AlarmsManager.Clear(false); // handling persistant/static issues
 
             for (int i = 0; i < 10; i++)
             {
                 var alarm = new Alarm(DateTime.Now.AddHours(i), (AlarmState)(i % 2));
-                AlarmFactory.Create(alarm);
+                AlarmsManager.Create(alarm);
             }
 
-            Assert.Equal(10, AlarmFactory.AlarmCount);
+            Assert.Equal(10, AlarmsManager.AlarmCount);
 
-            AlarmFactory.Clear(false);
-            Assert.Equal(0, AlarmFactory.AlarmCount);
+            AlarmsManager.Clear(false);
+            Assert.Equal(0, AlarmsManager.AlarmCount);
 
-            AlarmFactory.Initialize();
-            Assert.Equal(10, AlarmFactory.AlarmCount);
+            AlarmsManager.Initialize();
+            Assert.Equal(10, AlarmsManager.AlarmCount);
 
-           AlarmFactory.RemoveFile();
+           AlarmsManager.RemoveFile();
         }
     }
 }

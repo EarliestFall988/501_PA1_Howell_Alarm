@@ -39,12 +39,19 @@ namespace Core
         ///  Extention -> did the user acutally turn the alarm off? or did the alarm just go off indefinetly?
         /// </remarks>
         [JsonPropertyName("alarm-state")]
-        public AlarmState State { get; private set; } = AlarmState.On;
+        public AlarmState State { get; private set; } = AlarmState.Enabled;
 
         /// <summary>
         /// The name of the alarm
         /// </summary>
-        public string AlarmTitle { get; set; } = "My New Alarm";
+        [JsonPropertyName("alarm-title")]
+        public string AlarmTitle { get; private set; } = "My New Alarm";
+
+        /// <summary>
+        /// Is this alarm being edited by the user?
+        /// </summary>
+        [JsonIgnore]
+        public bool EditingAlarm { get; set; } = false;
 
         /// <summary>
         /// Default constructor
@@ -140,7 +147,8 @@ namespace Core
     /// </summary>
     public enum AlarmState
     {
-        Off,
-        On,
+        Disabled,
+        Enabled,
+        Sounding_Off,
     }
 }

@@ -6,14 +6,19 @@ namespace Alarm501Forms
     {
         public Form1()
         {
+
             InitializeComponent();
-            EditAlarm.OnFinishAlarm += PaintListView;
+
+            editSelectedToolStripMenuItem.Enabled = false;
+            removeToolStripMenuItem.Enabled = false;
+
+            EditAlarmStateController.OnFinishAlarm += PaintListView;
             PaintListView();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (AlarmFactory.AlarmCount == 5)
+            if (AlarmsManager.AlarmCount == 5)
             {
                 var result = MessageBox.Show("Only 5 alarms are allowed - add more?", "Question", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
@@ -24,28 +29,12 @@ namespace Alarm501Forms
                     return;
             }
 
-            AlarmFactory.Create(new Alarm(DateTime.Now, AlarmState.On));
+            var alarm = new Alarm(Guid.NewGuid().ToString(), "New Alarm", DateTime.Now.AddSeconds(4), AlarmState.Enabled, DateTime.Now);
+            AlarmsManager.Create(alarm);
 
             PaintListView();
-        }
 
-        public void PaintListView()
-        {
-            listView1.Items.Clear();
-
-            foreach (var x in AlarmFactory.Alarms)
-            {
-                ListViewItem item;
-
-                ListViewItem.ListViewSubItem[] items = new ListViewItem.ListViewSubItem[] {
-                    new ListViewItem.ListViewSubItem(null, $"'{x.AlarmTitle}'"),
-                    new ListViewItem.ListViewSubItem(null, x.SetAlarmTime.ToShortTimeString()),
-                    new ListViewItem.ListViewSubItem(null, x.State.ToString())
-                };
-
-                item = new ListViewItem(items, x.AlarmID);
-                listView1.Items.Add(item);
-            }
+            EditAlarmStateController.SetEdit(alarm);
         }
 
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,9 +59,9 @@ namespace Alarm501Forms
                     string id = item.ImageKey;
                     if (id != string.Empty)
                     {
-                        if (AlarmFactory.TryGetAlarmById(id, out var alarm))
+                        if (AlarmsManager.TryGetAlarmById(id, out var alarm))
                         {
-                            AlarmFactory.Delete(alarm);
+                            AlarmsManager.Delete(alarm);
                         }
                     }
 
@@ -81,33 +70,8 @@ namespace Alarm501Forms
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //SaveFileDialog dialog = new SaveFileDialog();
-            //dialog.Title = "Save Alarm File";
-            //dialog.InitialDirectory = AlarmFactory.Directory;
-            //dialog.ShowDialog();
-
-            //FileInfo info = new FileInfo(dialog.FileName);
-            //string? directory = info.DirectoryName;
-            //string? name = info.FullName;
-
-            //if (directory != null && name != null)
-            //{
-            //    AlarmFactory.Directory = directory;
-            //    AlarmFactory.FileName = name;
-            //}
-            //else
-            //{
-            //    MessageBox.Show("the directory is not valid", "Error");
-            //}
-        }
-
         private void editSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NotifyIcon icon = new NotifyIcon();
-            icon.Text = "test";
-            icon.Visible = true;
 
             if (listView1.SelectedItems.Count != 1)
             {
@@ -117,15 +81,10 @@ namespace Alarm501Forms
 
             var key = listView1.SelectedItems[0].ImageKey;
 
-            if (AlarmFactory.TryGetAlarmById(key, out var alarm))
+            if (AlarmsManager.TryGetAlarmById(key, out var alarm))
             {
-                EditAlarm.SetEdit(alarm);
+                EditAlarmStateController.SetEdit(alarm);
             }
-        }
-
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void alarmDropDown_Click(object sender, EventArgs e)
@@ -136,6 +95,88 @@ namespace Alarm501Forms
         private void toolStripSeparator1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (listView1.SelectedItems.Count < 1)
+            {
+                editSelectedToolStripMenuItem.Enabled = false;
+                removeToolStripMenuItem.Enabled = false;
+            }
+            else if (listView1.SelectedItems.Count == 1)
+            {
+                editSelectedToolStripMenuItem.Enabled = true;
+                removeToolStripMenuItem.Enabled = true;
+            }
+            else if (listView1.SelectedItems.Count > 1)
+            {
+                editSelectedToolStripMenuItem.Enabled = false;
+                removeToolStripMenuItem.Enabled = true;
+            }
+        }
+
+
+        private void InitializeTimer()
+        {
+            var timer = new System.Timers.Timer(100);
+            timer.Elapsed += CheckAlarmsComplete;
+            timer.SynchronizingObject = this;
+            timer.AutoReset = true;
+            timer.Start();
+        }
+
+        private void CheckAlarmsComplete(object? sender, System.Timers.ElapsedEventArgs args)
+        {
+            foreach (var x in Core.AlarmsManager.Alarms)
+            {
+                if (x.State == AlarmState.Enabled && TimeSpan.Compare(DateTime.Now.TimeOfDay, x.SetAlarmTime.TimeOfDay) == 0)
+                {
+                    SoundOff(x);
+                }
+            }
+        }
+
+        private void SoundOff(Alarm alarm)
+        {
+            SetAlarmSoundOffActive(true);
+            MessageBox.Show($"Alarm is going off:\n\'{alarm.AlarmTitle}\'");
+        }
+
+        private void SetAlarmSoundOffActive(bool active)
+        {
+            snoozeToolStripMenuItem.Enabled = active;
+            stopToolStripMenuItem.Enabled = active;
+            largestopbutton.Enabled = active;
+            alarmDropDown.Enabled = !active;
+            mainSnoozeButton.Enabled = active;
+
+            if (active) listView1.SelectedItems.Clear();
+
+            listView1.Enabled = !active;
+
+            if (active) alarmSFX_label.Text = "**Beep Beep**";
+            else alarmSFX_label.Text = "";
+        }
+
+
+        public void PaintListView()
+        {
+            listView1.Items.Clear();
+
+            foreach (var x in AlarmsManager.Alarms)
+            {
+                ListViewItem item;
+
+                ListViewItem.ListViewSubItem[] items = new ListViewItem.ListViewSubItem[] {
+                    new ListViewItem.ListViewSubItem(null, $"'{x.AlarmTitle}'"),
+                    new ListViewItem.ListViewSubItem(null, x.SetAlarmTime.ToShortTimeString()),
+                    new ListViewItem.ListViewSubItem(null, x.State.ToString())
+                };
+
+                item = new ListViewItem(items, x.AlarmID);
+                listView1.Items.Add(item);
+            }
         }
     }
 }

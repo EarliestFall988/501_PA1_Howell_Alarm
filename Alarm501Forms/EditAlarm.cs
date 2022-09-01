@@ -8,9 +8,14 @@ using Core;
 
 namespace Alarm501Forms
 {
-    public static class EditAlarm
+    /// <summary>
+    /// Handles managing Application state (in this case when editing alarm or not)
+    /// </summary>
+    public static class EditAlarmStateController
     {
-
+        /// <summary>
+        /// The alarm being edited
+        /// </summary>
         public static Alarm? EditedAlarm { get; private set; }
 
         public delegate void FinishAlarm();
@@ -19,6 +24,7 @@ namespace Alarm501Forms
         public static void SetEdit(Alarm alarm)
         {
             EditedAlarm = alarm;
+            EditedAlarm.EditingAlarm = true;
 
             Edit_Alarm form = new Edit_Alarm();
             form.ShowDialog();
@@ -27,6 +33,8 @@ namespace Alarm501Forms
         public static void SetComplete()
         {
             OnFinishAlarm?.Invoke();
+            EditedAlarm.EditingAlarm = false;
+            EditedAlarm = null;
         }
     }
 }

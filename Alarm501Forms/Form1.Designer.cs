@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listView1 = new System.Windows.Forms.ListView();
             this.alarmID = new System.Windows.Forms.ColumnHeader();
+            this.alarmSetTime = new System.Windows.Forms.ColumnHeader();
             this.alarmState = new System.Windows.Forms.ColumnHeader();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.alarmDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -42,7 +43,10 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.snoozeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.alarmSetTime = new System.Windows.Forms.ColumnHeader();
+            this.mainSnoozeButton = new System.Windows.Forms.Button();
+            this.alarmSFX_label = new System.Windows.Forms.Label();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.largestopbutton = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,10 +62,18 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView1_ItemSelectionChanged);
             // 
             // alarmID
             // 
             this.alarmID.Text = "Title";
+            this.alarmID.Width = 100;
+            // 
+            // alarmSetTime
+            // 
+            this.alarmSetTime.DisplayIndex = 2;
+            this.alarmSetTime.Text = "Alarm Set";
+            this.alarmSetTime.Width = 100;
             // 
             // alarmState
             // 
@@ -125,7 +137,8 @@
             // 
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.snoozeToolStripMenuItem});
+            this.snoozeToolStripMenuItem,
+            this.stopToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -134,20 +147,56 @@
             // 
             // snoozeToolStripMenuItem
             // 
+            this.snoozeToolStripMenuItem.Enabled = false;
             this.snoozeToolStripMenuItem.Name = "snoozeToolStripMenuItem";
-            this.snoozeToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.snoozeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.snoozeToolStripMenuItem.Text = "Snooze";
             // 
-            // alarmSetTime
+            // mainSnoozeButton
             // 
-            this.alarmSetTime.DisplayIndex = 2;
-            this.alarmSetTime.Text = "Alarm Set";
+            this.mainSnoozeButton.Enabled = false;
+            this.mainSnoozeButton.Location = new System.Drawing.Point(12, 188);
+            this.mainSnoozeButton.Name = "mainSnoozeButton";
+            this.mainSnoozeButton.Size = new System.Drawing.Size(269, 23);
+            this.mainSnoozeButton.TabIndex = 1;
+            this.mainSnoozeButton.Text = "Snooze";
+            this.mainSnoozeButton.UseVisualStyleBackColor = true;
+            // 
+            // alarmSFX_label
+            // 
+            this.alarmSFX_label.AutoSize = true;
+            this.alarmSFX_label.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.alarmSFX_label.Location = new System.Drawing.Point(139, 214);
+            this.alarmSFX_label.Name = "alarmSFX_label";
+            this.alarmSFX_label.Size = new System.Drawing.Size(110, 21);
+            this.alarmSFX_label.TabIndex = 2;
+            this.alarmSFX_label.Text = "**Beep Beep**";
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Enabled = false;
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            // 
+            // largestopbutton
+            // 
+            this.largestopbutton.Enabled = false;
+            this.largestopbutton.Location = new System.Drawing.Point(287, 188);
+            this.largestopbutton.Name = "largestopbutton";
+            this.largestopbutton.Size = new System.Drawing.Size(121, 23);
+            this.largestopbutton.TabIndex = 3;
+            this.largestopbutton.Text = "Stop";
+            this.largestopbutton.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(420, 206);
+            this.ClientSize = new System.Drawing.Size(420, 259);
+            this.Controls.Add(this.largestopbutton);
+            this.Controls.Add(this.alarmSFX_label);
+            this.Controls.Add(this.mainSnoozeButton);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.listView1);
             this.Name = "Form1";
@@ -174,5 +223,9 @@
         private ToolStripDropDownButton toolStripDropDownButton1;
         private ToolStripMenuItem snoozeToolStripMenuItem;
         private ColumnHeader alarmSetTime;
+        private Button mainSnoozeButton;
+        private Label alarmSFX_label;
+        private ToolStripMenuItem stopToolStripMenuItem;
+        private Button largestopbutton;
     }
 }

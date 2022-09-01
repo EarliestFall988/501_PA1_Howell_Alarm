@@ -12,8 +12,8 @@ namespace AlarmCoreTests
         /// <param name="state">the different alarm states</param>
         [
             Theory,
-            InlineData(AlarmState.Off),
-            InlineData(AlarmState.On)
+            InlineData(AlarmState.Disabled),
+            InlineData(AlarmState.Enabled)
             ]
         public void AlarmDoesCreateSuccessfullyUponUserCreationWithShortConstructor(AlarmState state)
         {
@@ -26,8 +26,8 @@ namespace AlarmCoreTests
         /// <param name="state">the different alarm states</param>
         [
             Theory,
-            InlineData(AlarmState.Off),
-            InlineData(AlarmState.On)
+            InlineData(AlarmState.Disabled),
+            InlineData(AlarmState.Enabled)
             ]
         public void AlarmDoesCreateSuccessfullyUponUserCreationWithDefaultConstructor(AlarmState state)
         {
@@ -48,7 +48,7 @@ namespace AlarmCoreTests
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                var al = new Alarm(id, "some alarm", DateTime.Now, AlarmState.On, DateTime.Now);
+                var al = new Alarm(id, "some alarm", DateTime.Now, AlarmState.Enabled, DateTime.Now);
             });
         }
 

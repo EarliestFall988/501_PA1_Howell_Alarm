@@ -13,7 +13,7 @@ namespace Core
     /// <summary>
     /// This class handles and creates alarms, it is static because there should only be one alarm factory per program instance
     /// </summary>
-    public static class AlarmFactory
+    public static class AlarmsManager
     {
 
         /// <summary>
@@ -113,6 +113,19 @@ namespace Core
         }
 
         /// <summary>
+        /// Snooze the alarm
+        /// </summary>
+        /// <param name="alarm">the current alarm</param>
+        /// <param name="seconds">the amount of seconds to snooze</param>
+        public static void Snooze(Alarm alarm, double seconds)
+        {
+            var newDateTime = alarm.SetAlarmTime.AddSeconds(seconds);
+
+            var newAlarm = new Alarm(Guid.NewGuid().ToString(), alarm.AlarmTitle, newDateTime, AlarmState.Enabled, alarm.AlarmCreated);
+            Update(alarm, newAlarm);
+        }
+
+        /// <summary>
         /// Make sure the json is written indented for the grader to view
         /// </summary>
         /// <returns>returns the json serializer options</returns>
@@ -163,7 +176,7 @@ namespace Core
                 return true;
             }
 
-            alarm = new Alarm(DateTime.Now, AlarmState.Off);
+            alarm = new Alarm(DateTime.Now, AlarmState.Disabled);
             return false;
         }
 

@@ -15,7 +15,7 @@ namespace Alarm501Forms
     public partial class Edit_Alarm : Form
     {
 
-        private Alarm? _alarm => EditAlarm.EditedAlarm;
+        private Alarm? _alarm => EditAlarmStateController.EditedAlarm;
 
         public Edit_Alarm()
         {
@@ -55,7 +55,7 @@ namespace Alarm501Forms
 
                 DateTime time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (int)hours, (int)minutesUpDown.Value, 0);
 
-                AlarmFactory.Update(_alarm, new Alarm(Guid.NewGuid().ToString(), title, time, alarmStateResult, _alarm.AlarmCreated));
+                AlarmsManager.Update(_alarm, new Alarm(Guid.NewGuid().ToString(), title, time, alarmStateResult, _alarm.AlarmCreated));
             }
 
             PreClose();
@@ -63,7 +63,7 @@ namespace Alarm501Forms
 
         private void PreClose()
         {
-            EditAlarm.SetComplete();
+            EditAlarmStateController.SetComplete();
             this.Close();
         }
 
