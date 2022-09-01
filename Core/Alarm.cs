@@ -42,15 +42,20 @@ namespace Core
         public AlarmState State { get; private set; } = AlarmState.On;
 
         /// <summary>
+        /// The name of the alarm
+        /// </summary>
+        public string AlarmTitle { get; set; } = "My New Alarm";
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="alarmID">the id of the alarm</param>
         /// <param name="setAlarmTime">the time the alarm will go off</param>
         /// <param name="state">the state of the alarm</param>
         [JsonConstructor()]
-        public Alarm(string alarmID, DateTime setAlarmTime, AlarmState state, DateTime AlarmCreated)
+        public Alarm(string alarmID, string alarmTitle, DateTime setAlarmTime, AlarmState state, DateTime AlarmCreated)
         {
-            PostConstructor(alarmID, setAlarmTime, state, AlarmCreated);
+            PostConstructor(alarmID, alarmTitle, setAlarmTime, state, AlarmCreated);
         }
 
         /// <summary>
@@ -60,7 +65,7 @@ namespace Core
         /// <param name="state">the state of the alarm</param>
         public Alarm(DateTime dateTime, AlarmState state)
         {
-            PostConstructor(Guid.NewGuid().ToString(), dateTime, state, DateTime.Now);
+            PostConstructor(Guid.NewGuid().ToString(), string.Empty, dateTime, state, DateTime.Now);
         }
 
         /// <summary>
@@ -70,12 +75,13 @@ namespace Core
         /// <param name="setAlarmTime">the set alarm time to go off</param>
         /// <param name="alarmID">the finger print id of the alarm</param>
         /// <param name="alarmCreated">the date and time the alarm was created</param>
+        /// <param name="alarmTitle">the title of the alarm</param>
         /// <remarks>
         /// Because we're using dotnet6 we don't have to worry about null references here.
         /// </remarks>
         /// <exception cref="ArgumentException">thrown when the alarm id is an empty string or when the alarm is set to go off before now</exception>
         /// <exception cref="ArgumentOutOfRangeException">thrown when the alarm state is not recognized</exception>
-        private void PostConstructor(string alarmID, DateTime setAlarmTime, AlarmState state, DateTime alarmCreated)
+        private void PostConstructor(string alarmID, string alarmTitle, DateTime setAlarmTime, AlarmState state, DateTime alarmCreated)
         {
             if (alarmID.Trim().Length == 0)
                 throw new ArgumentException($"The {nameof(alarmID)} parameter cannot be empty");
@@ -87,6 +93,7 @@ namespace Core
             SetAlarmTime = setAlarmTime;
             State = state;
             AlarmCreated = alarmCreated;
+            AlarmTitle = alarmTitle;
         }
 
         #region interface contract fulfillment

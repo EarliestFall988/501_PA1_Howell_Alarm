@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "501_PA1_Howell_Alarm", "501_PA1_Howell_Alarm\501_PA1_Howell_Alarm.csproj", "{64C6E8C7-A8BC-42D4-8B4A-945A35CFA576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{3452E41A-316B-468A-9B7B-6B433C89B361}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{3452E41A-316B-468A-9B7B-6B433C89B361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlarmCoreTests", "AlarmCoreTests\AlarmCoreTests.csproj", "{A4BF9FFB-E0B0-439D-B5C5-00485844B5F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlarmCoreTests", "AlarmCoreTests\AlarmCoreTests.csproj", "{A4BF9FFB-E0B0-439D-B5C5-00485844B5F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alarm501Forms", "Alarm501Forms\Alarm501Forms.csproj", "{FB2A1893-2D52-484E-BE9E-387D85084B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{64C6E8C7-A8BC-42D4-8B4A-945A35CFA576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64C6E8C7-A8BC-42D4-8B4A-945A35CFA576}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64C6E8C7-A8BC-42D4-8B4A-945A35CFA576}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64C6E8C7-A8BC-42D4-8B4A-945A35CFA576}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3452E41A-316B-468A-9B7B-6B433C89B361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3452E41A-316B-468A-9B7B-6B433C89B361}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3452E41A-316B-468A-9B7B-6B433C89B361}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{A4BF9FFB-E0B0-439D-B5C5-00485844B5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4BF9FFB-E0B0-439D-B5C5-00485844B5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4BF9FFB-E0B0-439D-B5C5-00485844B5F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB2A1893-2D52-484E-BE9E-387D85084B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB2A1893-2D52-484E-BE9E-387D85084B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB2A1893-2D52-484E-BE9E-387D85084B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB2A1893-2D52-484E-BE9E-387D85084B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

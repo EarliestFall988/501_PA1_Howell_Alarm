@@ -34,6 +34,8 @@ namespace _501_PA1_Howell_Alarm
             Core.AlarmFactory.OnAddAlarm += AddAlarm;
             Core.AlarmFactory.OnRemoveAlarm += RemoveAlarm;
             Core.AlarmFactory.OnClearAlarms += ClearAlarms;
+
+           Debug.WriteLine(System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.ToString());
         }
 
         private IEnumerable<Core.Alarm> Alarms => Core.AlarmFactory.Alarms;
@@ -89,7 +91,7 @@ namespace _501_PA1_Howell_Alarm
 
         private void AddAlarm(Core.Alarm alarm)
         {
-            Paint();
+             Paint();
         }
 
         private void RemoveAlarm(Core.Alarm alarm)

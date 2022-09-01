@@ -49,12 +49,14 @@ namespace Core
         /// <summary>
         /// The directory of the file path
         /// </summary>
-        private static readonly string _directory = System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+        public static string Directory { get; set; } = System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
 
         /// <summary>
         /// The alarms save file path, saved to the downloads folder where it can be quickly found and deleted
         /// </summary>
-        private static readonly string _saveFilePath = _directory + @"pa1_howell_alarms.txt";
+        public static string FileName { get; set; } = @"pa1_howell_alarms.txt";
+
+        private static string _saveFilePath => Directory + FileName;
 
         public delegate void AddAlarm(Alarm alarm);
         public delegate void RemoveAlarm(Alarm alarm);
@@ -135,12 +137,34 @@ namespace Core
         {
             string id = oldAlarm.AlarmID;
 
-            var resultAlarm = new Alarm(id, newAlarm.SetAlarmTime, newAlarm.State, newAlarm.AlarmCreated);
+            var resultAlarm = new Alarm(id, newAlarm.AlarmTitle, newAlarm.SetAlarmTime, newAlarm.State, newAlarm.AlarmCreated);
 
             Delete(oldAlarm, false);
             Create(resultAlarm, false);
 
             Serialize();
+        }
+
+        /// <summary>
+        /// Tries to find an alarm by the alarm ID
+        /// </summary>
+        /// <param name="id">the alarm id</param>
+        /// <param name="alarm">the alarm</param>
+        /// <returns>returns true if the alarm is found, false if not</returns>
+        /// <exception cref="ArgumentException">thrown when the <paramref name="id"/> is empty</exception>
+        public static bool TryGetAlarmById(string id, out Alarm alarm)
+        {
+            if (id == string.Empty)
+                throw new ArgumentException("the id cannot be empty");
+
+            if (CreatedAlarms.ContainsKey(id))
+            {
+                alarm = CreatedAlarms[id];
+                return true;
+            }
+
+            alarm = new Alarm(DateTime.Now, AlarmState.Off);
+            return false;
         }
 
         /// <summary>
@@ -157,10 +181,10 @@ namespace Core
         /// <exception cref="DirectoryNotFoundException"></exception>
         public static void RemoveFile()
         {
-            if (!Directory.Exists(_directory))
-                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({_directory})");
+            if (!System.IO.Directory.Exists(Directory))
+                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({Directory})");
 
-            if(File.Exists(_saveFilePath))
+            if (File.Exists(_saveFilePath))
             {
                 File.Delete(_saveFilePath);
             }
@@ -175,8 +199,8 @@ namespace Core
 
             string jsonStr = JsonSerializer.Serialize(CreatedAlarms, GetJsonDocInfo());
 
-            if (!Directory.Exists(_directory))
-                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({_directory})");
+            if (!System.IO.Directory.Exists(Directory))
+                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({Directory})");
 
             if (File.Exists(_saveFilePath))
                 File.Delete(_saveFilePath);
@@ -197,8 +221,8 @@ namespace Core
         /// <exception cref="DirectoryNotFoundException">thrown when the donwloads directory is not found</exception>
         private static void Deserialize()
         {
-            if (!Directory.Exists(_directory))
-                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({_directory})");
+            if (!System.IO.Directory.Exists(Directory))
+                throw new DirectoryNotFoundException($"Cannot find the downloads folder to store the alarms persistantly ({Directory})");
 
             StringBuilder jsonBuilder = new StringBuilder();
 

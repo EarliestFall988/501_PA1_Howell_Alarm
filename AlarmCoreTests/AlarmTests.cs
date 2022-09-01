@@ -31,7 +31,7 @@ namespace AlarmCoreTests
             ]
         public void AlarmDoesCreateSuccessfullyUponUserCreationWithDefaultConstructor(AlarmState state)
         {
-            Alarm al1 = new Alarm(Guid.NewGuid().ToString(), DateTime.Now, state, DateTime.Now);
+            Alarm al1 = new Alarm(Guid.NewGuid().ToString(), "some alarm", DateTime.Now, state, DateTime.Now);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace AlarmCoreTests
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                var al = new Alarm(id, DateTime.Now, AlarmState.On, DateTime.Now);
+                var al = new Alarm(id, "some alarm", DateTime.Now, AlarmState.On, DateTime.Now);
             });
         }
 
