@@ -11,7 +11,7 @@ namespace Alarm501Forms
 
         public Form1()
         {
-
+            AlarmsManager.Initialize();
             InitializeComponent();
 
             editSelectedToolStripMenuItem.Enabled = false;
