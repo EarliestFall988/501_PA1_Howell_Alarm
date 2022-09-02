@@ -1,9 +1,14 @@
 using Core;
 
+using System.Diagnostics;
+
 namespace Alarm501Forms
 {
     public partial class Form1 : Form
     {
+
+        private Dictionary<string, Alarm> _alarmsGoingOff = new Dictionary<string, Alarm>();
+
         public Form1()
         {
 
@@ -12,8 +17,11 @@ namespace Alarm501Forms
             editSelectedToolStripMenuItem.Enabled = false;
             removeToolStripMenuItem.Enabled = false;
 
+            alarmSFX_label.Text = "";
+
             EditAlarmStateController.OnFinishAlarm += PaintListView;
             PaintListView();
+            InitializeTimer();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
@@ -30,11 +38,15 @@ namespace Alarm501Forms
             }
 
             var alarm = new Alarm(Guid.NewGuid().ToString(), "New Alarm", DateTime.Now.AddSeconds(4), AlarmState.Enabled, DateTime.Now);
-            AlarmsManager.Create(alarm);
 
             PaintListView();
 
-            EditAlarmStateController.SetEdit(alarm);
+            var dialogResult = EditAlarmStateController.SetEdit(alarm);
+
+            if (dialogResult == DialogResult.OK)
+            {
+                AlarmsManager.Create(alarm);
+            }
         }
 
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,7 +128,6 @@ namespace Alarm501Forms
             }
         }
 
-
         private void InitializeTimer()
         {
             var timer = new System.Timers.Timer(100);
@@ -128,19 +139,34 @@ namespace Alarm501Forms
 
         private void CheckAlarmsComplete(object? sender, System.Timers.ElapsedEventArgs args)
         {
-            foreach (var x in Core.AlarmsManager.Alarms)
+
+            var alarms = Core.AlarmsManager.AllAlarms;
+
+            foreach (var x in alarms)
             {
-                if (x.State == AlarmState.Enabled && TimeSpan.Compare(DateTime.Now.TimeOfDay, x.SetAlarmTime.TimeOfDay) == 0)
+                if (x.Value.State == AlarmState.Enabled && TimeSpan.Compare(DateTime.Now.TimeOfDay, x.Value.SetAlarmTime.TimeOfDay) >= 0)
                 {
-                    SoundOff(x);
+                    if (!_alarmsGoingOff.ContainsKey(x.Value.AlarmID))
+                    {
+                        SoundOff(x.Value);
+                        _alarmsGoingOff.Add(x.Key, x.Value);
+                    }
                 }
             }
         }
 
         private void SoundOff(Alarm alarm)
         {
-            SetAlarmSoundOffActive(true);
-            MessageBox.Show($"Alarm is going off:\n\'{alarm.AlarmTitle}\'");
+            if (alarm.State != AlarmState.Sounding_Off)
+            {
+                AlarmsManager.UpdateState(alarm, AlarmState.Sounding_Off);
+
+                Debug.WriteLine(String.Join(",", _alarmsGoingOff));
+                SetAlarmSoundOffActive(true);
+                PaintListView();
+
+                MessageBox.Show($"Alarm is going off:\n\'{alarm.AlarmTitle}\'", "Alarm");
+            }
         }
 
         private void SetAlarmSoundOffActive(bool active)
@@ -177,6 +203,55 @@ namespace Alarm501Forms
                 item = new ListViewItem(items, x.AlarmID);
                 listView1.Items.Add(item);
             }
+        }
+
+
+        private void Snooze()
+        {
+            foreach (var x in _alarmsGoingOff)
+            {
+                AlarmsManager.UpdateState(x.Value, AlarmState.Enabled);
+                AlarmsManager.Snooze(x.Value, 3);
+            }
+
+            _alarmsGoingOff.Clear();
+            SetAlarmSoundOffActive(false);
+
+            PaintListView();
+        }
+
+        private void Stop()
+        {
+
+            foreach (var x in _alarmsGoingOff)
+            {
+                AlarmsManager.UpdateState(x.Value, AlarmState.Disabled);
+            }
+
+            _alarmsGoingOff.Clear();
+            SetAlarmSoundOffActive(false);
+
+            PaintListView();
+        }
+
+        private void mainSnoozeButton_Click(object sender, EventArgs e)
+        {
+            Snooze();
+        }
+
+        private void largestopbutton_Click(object sender, EventArgs e)
+        {
+            Stop();
+        }
+
+        private void snoozeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Snooze();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stop();
         }
     }
 }

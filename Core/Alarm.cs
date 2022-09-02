@@ -140,6 +140,11 @@ namespace Core
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return AlarmTitle + " " + SetAlarmTime + " : " + AlarmID;
+        }
     }
 
     /// <summary>

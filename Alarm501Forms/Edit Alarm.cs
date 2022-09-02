@@ -21,19 +21,23 @@ namespace Alarm501Forms
         {
             InitializeComponent();
 
+            dateTimePicker1.Format = DateTimePickerFormat.Time;
+
             if (_alarm != null)
             {
-                if (_alarm.SetAlarmTime.Hour > 12)
-                {
-                    hoursUpDown.Value = _alarm.SetAlarmTime.Hour - 12;
-                    ampmcombobox.Text = "PM";
-                }
-                else
-                {
-                    ampmcombobox.Text = "AM";
-                }
+                //if (_alarm.SetAlarmTime.Hour > 12)
+                //{
+                //    hoursUpDown.Value = _alarm.SetAlarmTime.Hour - 12;
+                //    ampmcombobox.Text = "PM";
+                //}
+                //else
+                //{
+                //    ampmcombobox.Text = "AM";
+                //}
 
-                minutesUpDown.Value = _alarm.SetAlarmTime.Minute;
+                //minutesUpDown.Value = _alarm.SetAlarmTime.Minute;
+
+                dateTimePicker1.Text = _alarm.SetAlarmTime.ToShortTimeString();
                 alarmStateComboBox.Text = _alarm.State.ToString();
                 titleTextBox.Text = _alarm.AlarmTitle;
             }
@@ -43,17 +47,14 @@ namespace Alarm501Forms
         {
             if (_alarm != null)
             {
-                int hours = (int)hoursUpDown.Value;
+                
 
                 string title = titleTextBox.Text;
                 Enum.TryParse<AlarmState>(alarmStateComboBox.Text, out var alarmStateResult);
 
-                if (ampmcombobox.Text.Trim().ToLower() == "pm")
-                {
-                    hours += 12;
-                }
+                DateTime time = DateTime.Parse(dateTimePicker1.Text);
 
-                DateTime time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (int)hours, (int)minutesUpDown.Value, 0);
+               // DateTime time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (int)hours, (int)minutesUpDown.Value, 0);
 
                 AlarmsManager.Update(_alarm, new Alarm(Guid.NewGuid().ToString(), title, time, alarmStateResult, _alarm.AlarmCreated));
             }

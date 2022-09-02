@@ -42,10 +42,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.snoozeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.mainSnoozeButton = new System.Windows.Forms.Button();
             this.alarmSFX_label = new System.Windows.Forms.Label();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.largestopbutton = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,6 +79,7 @@
             // 
             this.alarmState.DisplayIndex = 1;
             this.alarmState.Text = "On/Off";
+            this.alarmState.Width = 100;
             // 
             // toolStrip1
             // 
@@ -151,6 +152,15 @@
             this.snoozeToolStripMenuItem.Name = "snoozeToolStripMenuItem";
             this.snoozeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.snoozeToolStripMenuItem.Text = "Snooze";
+            this.snoozeToolStripMenuItem.Click += new System.EventHandler(this.snoozeToolStripMenuItem_Click);
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Enabled = false;
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // mainSnoozeButton
             // 
@@ -161,6 +171,7 @@
             this.mainSnoozeButton.TabIndex = 1;
             this.mainSnoozeButton.Text = "Snooze";
             this.mainSnoozeButton.UseVisualStyleBackColor = true;
+            this.mainSnoozeButton.Click += new System.EventHandler(this.mainSnoozeButton_Click);
             // 
             // alarmSFX_label
             // 
@@ -172,13 +183,6 @@
             this.alarmSFX_label.TabIndex = 2;
             this.alarmSFX_label.Text = "**Beep Beep**";
             // 
-            // stopToolStripMenuItem
-            // 
-            this.stopToolStripMenuItem.Enabled = false;
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.stopToolStripMenuItem.Text = "Stop";
-            // 
             // largestopbutton
             // 
             this.largestopbutton.Enabled = false;
@@ -188,6 +192,7 @@
             this.largestopbutton.TabIndex = 3;
             this.largestopbutton.Text = "Stop";
             this.largestopbutton.UseVisualStyleBackColor = true;
+            this.largestopbutton.Click += new System.EventHandler(this.largestopbutton_Click);
             // 
             // Form1
             // 

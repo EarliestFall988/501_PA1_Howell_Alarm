@@ -119,9 +119,20 @@ namespace Core
         /// <param name="seconds">the amount of seconds to snooze</param>
         public static void Snooze(Alarm alarm, double seconds)
         {
-            var newDateTime = alarm.SetAlarmTime.AddSeconds(seconds);
+            var newSetTime = DateTime.Now.AddSeconds(seconds);
 
-            var newAlarm = new Alarm(Guid.NewGuid().ToString(), alarm.AlarmTitle, newDateTime, AlarmState.Enabled, alarm.AlarmCreated);
+            var newAlarm = new Alarm(Guid.NewGuid().ToString(), alarm.AlarmTitle, newSetTime, AlarmState.Enabled, alarm.AlarmCreated);
+            Update(alarm, newAlarm);
+        }
+
+        /// <summary>
+        /// Update the state of the alarm
+        /// </summary>
+        /// <param name="alarm">the alarm</param>
+        /// <param name="state">the new state</param>
+        public static void UpdateState(Alarm alarm, AlarmState state)
+        {
+            var newAlarm = new Alarm(Guid.NewGuid().ToString(), alarm.AlarmTitle, alarm.SetAlarmTime, state, alarm.AlarmCreated);
             Update(alarm, newAlarm);
         }
 

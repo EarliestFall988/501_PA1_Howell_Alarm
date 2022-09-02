@@ -18,23 +18,28 @@ namespace Alarm501Forms
         /// </summary>
         public static Alarm? EditedAlarm { get; private set; }
 
+
         public delegate void FinishAlarm();
         public static event FinishAlarm? OnFinishAlarm;
 
-        public static void SetEdit(Alarm alarm)
+        public static DialogResult SetEdit(Alarm alarm)
         {
             EditedAlarm = alarm;
             EditedAlarm.EditingAlarm = true;
 
             Edit_Alarm form = new Edit_Alarm();
-            form.ShowDialog();
+            return form.ShowDialog();
         }
 
         public static void SetComplete()
         {
             OnFinishAlarm?.Invoke();
-            EditedAlarm.EditingAlarm = false;
-            EditedAlarm = null;
+
+            if (EditedAlarm != null)
+            {
+                EditedAlarm.EditingAlarm = false;
+                EditedAlarm = null;
+            }
         }
     }
 }
